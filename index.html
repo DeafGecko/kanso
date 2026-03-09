@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Kanso - Minimalist Writing</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Open+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap"
+            rel="stylesheet">
+      <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body class="white font-georgia">
+
+      <!-- Save Notification Popup -->
+      <div id="save-notification" class="save-notification hidden">Saved!</div>
+
+      <h2 class="zen-app-title">KANSO</h2>
+
+      <!-- Hover Triggers -->
+      <div class="hover-trigger-bottom"></div>
+      <div class="hover-trigger-right"></div>
+
+      <!-- Writing area App -->
+      <div class="container">
+            <textarea id="writing-area"
+                  placeholder="Hey! This is an interactive space—feel free to write anything here." spellcheck="true"
+                  autofocus></textarea>
+      </div>
+
+      <!-- Stats Panel: Shows live character, word, paragraph, and page counts -->
+      <div class="stats-panel">
+            <div class="stat-item">
+                  <span class="stat-label">Characters</span>
+                  <span class="stat-value" id="char-count">0</span>
+            </div>
+            <div class="stat-item">
+                  <span class="stat-label">Words</span>
+                  <span class="stat-value" id="word-count">0</span>
+            </div>
+            <div class="stat-item hidden" id="limit-display">
+                  <span class="stat-label">Limit</span>
+                  <span class="stat-value" id="limit-count">0 / 0</span>
+            </div>
+            <div class="stat-item hidden" id="paragraph-limit-display">
+                  <span class="stat-label">Paragraphs</span>
+                  <span class="stat-value" id="paragraph-count">0</span>
+            </div>
+            <div class="stat-item hidden" id="page-limit-display">
+                  <span class="stat-label">Pages</span>
+                  <span class="stat-value" id="page-count">0</span>
+            </div>
+      </div>
+
+      <!-- Controls Panel: Theme, font, limits, and file controls -->
+      <div class="controls-panel">
+
+            <!-- Theme Selector: Choose between Light, Coffee, and Dark modes -->
+            <div class="control-group">
+                  <div class="control-label">Theme</div>
+                  <div class="theme-buttons">
+                        <div class="theme-btn active" data-theme="white" title="Light Mode">
+                              <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="theme-btn" data-theme="coffee" title="Coffee Mode">
+                              <i class="fas fa-mug-hot"></i>
+                        </div>
+                        <div class="theme-btn" data-theme="dark" title="Dark Mode">
+                              <i class="fas fa-moon"></i>
+                        </div>
+                  </div>
+            </div>
+
+            <!-- Font Selection: Choose font family for writing area -->
+            <div class="control-group">
+                  <div class="control-label">Font</div>
+                  <select class="font-select" id="font-select" title="Font selector">
+                        <option value="georgia">Georgia (Classic)</option>
+                        <option value="serif">Merriweather (Elegant)</option>
+                        <option value="lora">Lora (Modern Serif)</option>
+                        <option value="playfair">Playfair Display (Stylish)</option>
+                        <option value="sans">System Sans (Clean)</option>
+                        <option value="openSans">Open Sans (Readable)</option>
+                        <option value="mono">Courier (Typewriter)</option>
+                        <option value="writer">Courier Prime (Writer)</option>
+                  </select>
+            </div>
+
+            <!-- Word Limit: Set and enable a maximum word count -->
+            <div class="control-group">
+                  <div class="control-label">Word Limit</div>
+                  <div class="flex-row gap-16 full-width">
+                        <div class="limit-input no-margin">
+                              <input type="number" id="word-limit-input" placeholder="Max words" min="1" value="500" />
+                        </div>
+                        <div class="limit-toggle ml-auto">
+                              <div class="toggle-switch" id="limit-toggle">
+                                    <div class="toggle-slider"></div>
+                              </div>
+                              <span>Enable</span>
+                        </div>
+                  </div>
+                  <div id="word-limit-warning" class="hidden word-limit-warning">
+                        Word limit exceeded!
+                  </div>
+            </div>
+
+            <!-- Paragraph Limit: Set and enable a maximum paragraph count -->
+            <div class="control-group">
+                  <div class="control-label">Paragraph Limit</div>
+                  <div class="flex-row gap-16 full-width">
+                        <div class="limit-input no-margin">
+                              <input type="number" id="paragraph-limit-input" placeholder="Max paragraphs" min="1"
+                                    value="10" />
+                        </div>
+                        <div class="limit-toggle ml-auto">
+                              <div class="toggle-switch" id="paragraph-limit-toggle">
+                                    <div class="toggle-slider"></div>
+                              </div>
+                              <span>Enable</span>
+                        </div>
+                  </div>
+            </div>
+
+            <!-- Page Limit: Set and enable a maximum page count (500 words per page) -->
+            <div class="control-group">
+                  <div class="control-label">Page Limit</div>
+                  <div class="flex-row gap-16 full-width">
+                        <div class="limit-input no-margin">
+                              <input type="number" id="page-limit-input" placeholder="Max pages" min="1" value="1" />
+                        </div>
+                        <div class="limit-toggle ml-auto">
+                              <div class="toggle-switch" id="page-limit-toggle">
+                                    <div class="toggle-slider"></div>
+                              </div>
+                              <span>Enable</span>
+                        </div>
+                  </div>
+            </div>
+
+            <!-- File Controls: Save, open, and create new documents -->
+            <div class="control-group">
+                  <div class="control-label">Files</div>
+                  <div class="file-buttons">
+                        <button class="file-btn" id="saveBtn">
+                              <i class="fas fa-save"></i> Save File
+                        </button>
+                        <button class="file-btn" id="openBtn">
+                              <i class="fas fa-folder-open"></i> Open File
+                        </button>
+                        <button class="file-btn" id="newBtn">
+                              <i class="fas fa-file"></i> New Document
+                        </button>
+                  </div>
+                  <label for="file-input" class="visually-hidden">Open file</label>
+                  <input type="file" id="file-input" accept=".txt,.md" title="Open file" />
+            </div>
+      </div>
+
+      <script type="module" src="/src/main.js"></script>
+
+</html>
+</body>
+
+</html>
